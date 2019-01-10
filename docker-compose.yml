@@ -1,0 +1,34 @@
+version: '3'
+services:
+  flask:
+    command: sh -c 'pip install -r requirements.txt && flask run -h 0.0.0.0 -p 5000'
+    build:
+      context: .
+      dockerfile: .docker/python/Dockerfile
+      args:
+        FLASK_ENV: development
+    environment:
+      FLASK_APP: index.py
+      FLASK_ENV: development
+      DB_NAME: naive_bayes
+      DB_USER: root
+      DB_HOST: db
+      DB_PORT: 3306
+    volumes:
+    - .:/var/www/naive-bayes
+    - pip-cache:/root/.cache
+    - pip-packages:/usr/local/lib/python3.7/site-packages
+    ports:
+    - 5000:5000
+  db:
+    image: mysql:5.7
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - .docker/db/conf.d/:/etc/mysql/conf.d/
+      - db-data:/var/lib/mysql
+volumes:
+  db-data:
+  pip-cache:
+  pip-packages:
