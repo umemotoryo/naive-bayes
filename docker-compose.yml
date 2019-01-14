@@ -8,10 +8,11 @@ services:
       args:
         FLASK_ENV: development
     environment:
-      FLASK_APP: index.py
+      FLASK_APP: flaskr
       FLASK_ENV: development
       DB_NAME: naive_bayes
       DB_USER: root
+      DB_PASS: password
       DB_HOST: db
       DB_PORT: 3306
     volumes:
