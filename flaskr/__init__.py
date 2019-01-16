@@ -34,9 +34,11 @@ def create_app(test_config=None):
 
     @app.route('/')
     def index():
+        # TODO: 次回やること
+        # - 文字のベクトルを取得する箇所を分離する
+        # - BernoulliNBのfitする箇所も分離する
+        # - globalにしている箇所はファイルを分けてクラスにする
         global values,results,b_clf,processor, count_vect
-        if (count_vect is None):
-            count_vect = CountVectorizer()
         if (values is None and results is None):
             values = []
             results = []
@@ -44,7 +46,12 @@ def create_app(test_config=None):
             for row in tsv:
                 values.append(row[-1])
                 results.append(1 if row[1] == 'p' else 0)
+        # tsv_separator = TsvSeparator(os.path.join(app.instance_path, 'data.tsv'))
+        # values = tsv_separator.get_values()
+        # results = tsv_separator.get_values()
 
+        if (count_vect is None):
+            count_vect = CountVectorizer()
         if (b_clf is None):
             X = count_vect.fit_transform(values)
             y = np.array(results)
